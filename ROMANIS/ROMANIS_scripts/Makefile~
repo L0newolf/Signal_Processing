@@ -1,0 +1,57 @@
+NVCC=nvcc
+INC=/home/arl/NVIDIA_CUDA-5.5_Samples/NVIDIA_CUDA-5.5_Samples/common/inc/
+NVOPT=-g -ccbin g++ -m64 -I $(INC)
+BF = src/beamformer/cudaBF.cu
+
+GPP=g++
+
+DOPT=-g -lglut -lGLEW -lGL -lm -lpthread
+DISP= -L/usr/lib/nvidia-331-updates src/playBackBFO/display.cpp
+
+GCC=gcc
+
+SOPT= -g -lpthread
+SERV= src/server/server_app.c
+SERV_EXT= src/server/server_app_ext.c
+
+
+PBDAQ = src/playBackDAQ/playbackDAQ.cu
+PBOPT =-m64 -gencode arch=compute_20,code=sm_20 -Xptxas -v -Xcompiler -fopenmp -Xcompiler -mcmodel=large -lcuda -lcudart -I $(INC)
+
+RT = src/romanisRT/romanisRT.cu
+RTOPT = -m64 -gencode arch=compute_20,code=sm_20 -Xptxas -v -Xcompiler -fopenmp -Xcompiler -mcmodel=large -lcuda -lcudart -I $(INC)
+
+.PHONY: clean
+
+bfoGen: 
+	$(NVCC) $(BF) $(NVOPT) -o bin/bfoGen
+	
+playbackBFO:
+	$(GPP) $(DISP) $(DOPT) -o bin/playbackBFO
+	
+playbackDAQ:
+	$(NVCC) $(PBDAQ) $(PBOPT) $(DOPT) -o bin/playbackDAQ
+
+romanisRT:
+	$(NVCC) $(RT) $(RTOPT) $(DOPT) -o bin/romanisRT
+			
+server:
+	$(GCC) $(SERV) $(SOPT) -o bin/dataAq
+	$(GCC) $(SERV_EXT) $(SOPT) -o bin/dataAq_ext
+	
+	
+all:
+	$(NVCC) $(BF) $(NVOPT) -o bin/bfoGen
+	$(GPP) $(DISP) $(DOPT) -o bin/playbackBFO
+	$(GCC) $(SERV) $(SOPT) -o bin/dataAq
+	$(GCC) $(SERV_EXT) $(SOPT) -o bin/dataAq_ext
+	$(NVCC) $(PBDAQ) $(PBOPT) $(DOPT) -o bin/playbackDAQ
+	$(NVCC) $(RT) $(RTOPT) $(DOPT) -o bin/romanisRT
+
+clean:
+	rm -f bin/bfoGen
+	rm -f bin/playbackBFO
+	rm -f bin/dataAq
+	rm -f bin/dataAq_ext
+	rm -f bin/playbackDAQ
+	rm -f bin/romanisRT

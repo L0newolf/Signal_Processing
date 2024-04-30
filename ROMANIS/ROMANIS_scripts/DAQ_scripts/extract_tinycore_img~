@@ -1,0 +1,9 @@
+#!/bin/bash
+FOLDER="/home/arl/Dropbox/SVN/trunk/ROMANIS"
+TFTP_FOLDER="/var/lib/tftpboot"
+
+echo "Please Wait..."
+mkdir $FOLDER/TCLINUX_INITRD/extract/
+cd $FOLDER/TCLINUX_INITRD/extract/
+zcat $TFTP_FOLDER/tinycore.gz | sudo cpio -i -H newc -d
+echo -e "TinyCore boot-image extracted in /root/ROMANIS/TCLINUX_INITRD/extract\n"

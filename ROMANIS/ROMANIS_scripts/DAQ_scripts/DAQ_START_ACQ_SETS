@@ -1,0 +1,85 @@
+#!/bin/bash
+
+ROMANIS_HOME = /home/arl/ROMANIS
+DAQ_FOLDER= $ROMANIS_HOME/DAQ_scripts
+SYSCON_FOLDER = $ROMANIS_HOME/SYSCON/SYSCON_dryend
+
+$SYSCON_FOLDER/ATT stopacq
+
+#SERVICE='server_app_ext'
+SERVICE='romanisRT'
+
+if ps ax | grep -v grep | grep $SERVICE > /dev/null
+then
+    echo "$SERVICE service running, everything is fine"
+else
+    echo "$SERVICE is NOT running"
+    echo "PLEASE ensure that Acquisition Server is running!!" 
+    exit
+fi
+
+echo -e "Log Entry:\t" 
+read -e log_entry
+echo -e "Log Entry: $log_entry" >> $ROMANIS_HOME/log_ext.log
+
+i="0"
+while [ $i -lt 1 ];
+do
+echo -e "Please specify PGC value:\t"
+read -e pgc
+if (( $pgc > 7 )); then 
+	echo -e "Invalid PGC value"
+	echo
+else
+   $SYSCON_FOLDER/ATT setpgc $pgc >> $ROMANIS_HOME/log_ext.log
+   #echo -e "Valid PGC value\n"
+	i="1"
+fi
+done	 
+
+#echo -e "Well Done!"
+
+
+echo -e "Enter number of Sets:\t"
+read sets
+count=$sets
+echo -e "Enter Acquisition Period(secs):\t"
+read acq_time
+
+while [ $count -gt 0 ];
+do
+
+sshpass -proot ssh root@192.168.0.10 '/usr/src/linux/drivers/16*/acq*/acquire_app 0 3600' &
+sshpass -proot ssh root@192.168.0.11 '/usr/src/linux/drivers/16*/acq*/acquire_app 0 3600' &
+sshpass -proot ssh root@192.168.0.12 '/usr/src/linux/drivers/16*/acq*/acquire_app 0 3600' &
+sshpass -proot ssh root@192.168.0.13 '/usr/src/linux/drivers/16*/acq*/acquire_app 0 3600' &
+
+sshpass -proot ssh root@192.168.10.10 '/usr/src/linux/drivers/16*/acq*/acquire_app 0 3600' &
+sshpass -proot ssh root@192.168.10.11 '/usr/src/linux/drivers/16*/acq*/acquire_app 0 3600' &
+sshpass -proot ssh root@192.168.10.12 '/usr/src/linux/drivers/16*/acq*/acquire_app 0 3600' &
+sshpass -proot ssh root@192.168.10.13 '/usr/src/linux/drivers/16*/acq*/acquire_app 0 3600' &
+#echo "Acquisition started"
+sleep 0.75s
+
+if (( $count == $sets )); then 
+   echo -e "Start Acquisition Clock? (y/n):\t"
+   read reply
+   if [ $reply == y ]; then
+      $SYSCON_FOLDER/ATT startacq
+      #echo "Clock Started"
+      sleep $acq_time
+   else
+      echo -e "Stopping Acquisition Clock"
+      $SYSCON_FOLDER/ATT stopacq
+      $DAQ_FOLDER/DAQ_KILL_ACQ_EXT
+      #echo "Clock Stopped"
+   fi	   
+else
+   $SYSCON_FOLDER/ATT startacq
+   #echo "Clock Started"
+   sleep $acq_time	   
+fi
+
+let count--   
+$DAQ_FOLDER/DAQ_STOP_ACQ_EXT
+done

@@ -1,0 +1,13 @@
+#!/bin/bash
+FOLDER="/home/arl/Dropbox/SVN/trunk/ROMANIS"
+
+
+echo "Please Wait..."
+chmod 775 $FOLDER/TCLINUX_INITRD/extract/opt/bootlocal.sh
+chmod 777 $FOLDER/TCLINUX_INITRD/extract/usr/loc*/src/lin*/driver*/16*/testapp/*
+chmod 777 $FOLDER/TCLINUX_INITRD/extract/usr/loc*/src/lin*/driver*/16*/acquire_app/*
+cd $FOLDER/TCLINUX_INITRD/extract/
+find | cpio -o -H newc | gzip -2 > ../tinycore.gz 
+sudo cp -a $FOLDER/TCLINUX_INITRD/tinycore.gz /var/lib/tftpboot/
+sudo chmod 777 /var/lib/tftpboot/tinycore.gz
+echo -e "TinyCore boot-image updated in /var/lib/tftpboot\n"

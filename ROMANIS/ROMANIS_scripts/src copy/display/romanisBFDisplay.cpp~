@@ -1,0 +1,442 @@
+#include <stdio.h>
+#include <stdlib.h>
+#include <math.h>
+#include <string.h>
+//OpenGL specific includes
+#include <GL/glew.h>
+#include <GL/glut.h>
+#include "shader_utils.h"
+#include "colourBar.h"
+#include "romanisBFDisplay.hpp"
+
+
+//Default User Options
+int FrameSize = 15;
+int freqBinLower = 1;
+int freqBinUpper = 19;
+float ExpAvg = 0.9;
+float DynRange = 12.0;
+
+//////////////////////////////
+float *bfoData;
+//////////////////////////////
+
+//Buffer pointer to store the processed beam frames
+float frameBuffer[NUM_SQRS];
+
+// Common variables used for data processing and display
+int beams,framesToDraw,dataIdx,fRange;
+int frameCount = 0;
+float cimg[ybeams][xbeams];
+
+
+
+// Initializes all the parameters and variables
+void initVars(int len){
+    fRange = freqBinUpper-freqBinLower+1;
+    beams = ybeams*xbeams*fbins;
+    framesToDraw = len/(2*beams*FrameSize);
+    printf("Frames to draw : %d\n",framesToDraw );
+    //intialize the cimg array to all zeros
+    for(int y=0; y<ybeams; y++) {
+        for(int x=0; x<xbeams; x++) {
+            cimg[y][x]=0.0f;
+            }
+        }
+    dataIdx = 0;
+}
+
+/* ###################################################################################
+					Beamformer Output Processing
+   ################################################################################### */
+
+// Interpolation Function
+void interpolate (float in[ybeams][xbeams], float out[ybeamsInt][xbeamsInt]) {
+
+    float xStep,yStep;
+
+    /* Fill all first rows */
+    for(int j=0; j<ybeams; j++) {
+        for(int i = 0; i<xbeams-1; i++) {
+            xStep = (in[j][i+1] - in[j][i])/(INTERPOLATION_FACTOR);
+            out[INTERPOLATION_FACTOR*j][INTERPOLATION_FACTOR*i] = in[j][i];
+            for(int k=1; k<INTERPOLATION_FACTOR; k++) {
+                out[INTERPOLATION_FACTOR*j][INTERPOLATION_FACTOR*i+k] = in[j][i] + k*xStep;
+                }
+            }
+        out[INTERPOLATION_FACTOR*j][xbeamsInt-1] = in[j][xbeams-1];
+        }
+
+    /* Fill up all the clomuns */
+    for(int i=0; i<ybeams-1; i++) {
+        for(int j=0; j<xbeamsInt; j++) {
+            yStep = (out[INTERPOLATION_FACTOR*(i+1)][j] - out[INTERPOLATION_FACTOR*i][j])/INTERPOLATION_FACTOR;
+            for(int k=1; k<INTERPOLATION_FACTOR; k++) {
+                out[INTERPOLATION_FACTOR*i+k][j] = out[INTERPOLATION_FACTOR*i][j] + k*yStep;
+                }
+            }
+        }
+
+    }
+
+void processBF(float *bfOutput) {
+
+float sum,maxVal;
+float beamFrames[FrameSize][xbeams][ybeams][fbins];
+    float frameFreqAvg[FrameSize][xbeams][ybeams];
+    float frameTimeAvg[xbeams][ybeams];
+    float cimgInt[ybeamsInt][xbeamsInt];
+    int bufIdx = 0;
+    int dynAdd;
+//initialize the frame pointer to 1st frame
+    sum =0;
+    maxVal = 0;
+
+
+
+//Select the frames in blocks of Framesize,Average out the frames over the desired frequency range
+        for(int frame=0; frame<FrameSize; frame++) {
+            for(int y=ybeams-1; y>-1; y--) {
+                for(int x=xbeams-1; x>-1; x--) {
+                    for(int f=0; f<fbins; f++) {
+                        beamFrames[frame][x][y][f] = sqrt(pow(bfOutput[dataIdx],2)+pow(bfOutput[dataIdx+1],2));
+                        dataIdx+=2;
+                        }
+                     sum = 0.0f;
+                    for(int f=freqBinLower-1; f<freqBinUpper; f++) {
+                        sum += beamFrames[frame][x][y][f];
+                    }
+                    frameFreqAvg[frame][x][y] = sum/fRange;
+                    }
+                }
+            }
+
+//Avearge out the frames into a singe frame,Multiply cimg and transpose of the time average frames with ExpAvg
+        for(int x=0; x<xbeams; x++) {
+            for(int y=0; y<ybeams; y++) {
+                sum = 0.0f;
+                for(int frame=0; frame<FrameSize; frame++) {
+                    sum+=frameFreqAvg[frame][x][y];
+                    }
+                frameTimeAvg[x][y] = sum/FrameSize;
+                cimg[y][x] = ExpAvg*cimg[y][x] + (1.0-ExpAvg)*frameTimeAvg[x][y];
+                }
+            }
+
+//Interpolate cimg
+        interpolate(cimg,cimgInt);
+
+//Take log of interpolated cimg and find maximum values
+        for(int y=0; y<ybeamsInt; y++) {
+            for(int x=0; x<xbeamsInt; x++) {
+                cimgInt[y][x] = 20*log10(cimgInt[y][x]);
+                if (maxVal<cimgInt[y][x])
+                    maxVal = cimgInt[y][x];
+                }
+            }
+
+//Set the Dynamic Range values
+        dynAdd = -maxVal+DynRange;
+        for(int y=0; y<ybeamsInt; y++) {
+            for(int x=0; x<xbeamsInt; x++) {
+                cimgInt[y][x] = (cimgInt[y][x]+dynAdd)/DynRange;
+                if(cimgInt[y][x]<0)
+                    cimgInt[y][x] = 0.0;
+                else if(cimgInt[y][x]>1.0)
+                    cimgInt[y][x] = 63.0;
+                else
+                    cimgInt[y][x] = 63.0*cimgInt[y][x];
+
+                frameBuffer[bufIdx] =  cimgInt[y][x];
+                bufIdx++;
+
+                }
+            }
+    }
+
+
+/* ###################################################################################
+					Beamformer Display using OpenGL
+   ################################################################################### */
+
+
+GLuint vbo_romanis, vbo_romanis_colors;
+GLuint program;
+GLint attribute_coord2d, attribute_v_color;
+GLint uniform_fade;
+
+struct attributes {
+  GLfloat coord2d[2];
+  GLfloat v_color[3];
+};
+
+GLfloat colorBar[3];
+
+struct attributes Vertices[4*((xPoints)*(yPoints))+4*xPoints];
+
+int init_resources();
+void free_resources();
+
+void getColour(attributes *vertex,int clrPtr, int colourBar){
+
+  int clr;
+  if(!colourBar)
+    clr = (int)(frameBuffer[clrPtr]/2.0);
+  else
+    clr = clrPtr;
+
+  vertex->v_color[0] = accousColor[clr][0];
+  vertex->v_color[1] = accousColor[clr][1];
+  vertex->v_color[2] = accousColor[clr][2];
+}
+
+
+void genVerticesDisplay(){
+
+    float curColor;
+
+    int i,j;
+    int x=0;
+    int y=0;
+    int vertCount = 0;
+    float xcords[xPoints];
+    float ycords[yPoints];
+
+    int clrPtr;
+    float xstep = (2*xLim)/(float)(xPoints-1);
+    float ystep = (2*yLim)/(float)(yPoints-1);
+
+    for(i=0;i<xPoints;i++)
+            xcords[i] = -xLim + i*xstep;
+
+    for(i=0;i<yPoints;i++)
+            ycords[i] = -yLim + i*ystep+yOffset;
+
+    clrPtr = 0;
+
+    for (i=0;i<NUM_SQRS;i++){
+        if (x==xPoints-1)
+        {
+          x=0;
+          y=y+1;
+        }
+
+        Vertices[vertCount].coord2d[0] = xcords[x];
+        Vertices[vertCount].coord2d[1] = ycords[y];
+        getColour(&Vertices[vertCount],clrPtr,0);
+        vertCount++;
+
+		Vertices[vertCount].coord2d[0] = xcords[x+1];
+        Vertices[vertCount].coord2d[1] = ycords[y];
+        getColour(&Vertices[vertCount],clrPtr,0);
+        vertCount++;
+
+        Vertices[vertCount].coord2d[0] = xcords[x+1];
+        Vertices[vertCount].coord2d[1] = ycords[y+1];
+        getColour(&Vertices[vertCount],clrPtr,0);
+        vertCount++;
+
+        Vertices[vertCount].coord2d[0] = xcords[x];
+        Vertices[vertCount].coord2d[1] = ycords[y+1];
+        getColour(&Vertices[vertCount],clrPtr,0);
+        vertCount++;
+
+	x+=1;
+  clrPtr+=1;
+
+    }
+
+  //Draw the colour bar
+  x=0;
+  float yColorBar[] = {-0.4,-0.45};
+  int curColour = 0;
+  int drawCnt = 0;
+
+  for(i=0;i<4*xPoints;i+=4){
+
+  		  Vertices[i].coord2d[0] = xcords[x];
+        Vertices[i].coord2d[1] = yColorBar[0];
+        getColour(&Vertices[i],curColour,1);
+
+		    Vertices[i+1].coord2d[0] = xcords[x+1];
+        Vertices[i+1].coord2d[1] = yColorBar[0];
+        getColour(&Vertices[i+1],curColour,1);
+
+		    Vertices[i+2].coord2d[0] = xcords[x+1];
+        Vertices[i+2].coord2d[1] = yColorBar[1];
+        getColour(&Vertices[i+2],curColour,1);
+
+		    Vertices[i+3].coord2d[0] = xcords[x];
+        Vertices[i+3].coord2d[1] = yColorBar[1];
+        getColour(&Vertices[i+3],curColour,1);
+
+        drawCnt+=1;
+
+        if(drawCnt % 2 == 0)
+          curColour++;
+
+
+	x+=1;
+  }
+
+}
+
+
+void updateFrame(){
+  if(frameCount<framesToDraw){
+    glMapBuffer(GL_ARRAY_BUFFER,GL_READ_WRITE);
+    processBF(bfoData);
+    genVerticesDisplay();
+    glBufferData(GL_ARRAY_BUFFER, sizeof(Vertices), Vertices, GL_STREAM_DRAW);
+  }
+}
+
+//! Create a timer event for refresh
+void timerEvent(int value) {
+  glutPostRedisplay();
+  glutTimerFunc(refreshDelay, timerEvent, 0);
+}
+
+void fpsDisplay(){
+  char fps[256];
+  sprintf(fps, "ROMANIS BEAM VISUALISATION : Frame Number %d",frameCount);
+  glutSetWindowTitle(fps);
+}
+
+int init_resources()
+{
+  genVerticesDisplay();
+  glGenBuffers(1, &vbo_romanis);
+  glBindBuffer(GL_ARRAY_BUFFER, vbo_romanis);
+  glBufferData(GL_ARRAY_BUFFER, sizeof(Vertices), Vertices, GL_STREAM_DRAW);
+
+  GLint link_ok = GL_FALSE;
+
+  GLuint vs, fs;
+  if ((vs = create_shader("romanis.v.glsl", GL_VERTEX_SHADER))   == 0) return 0;
+  if ((fs = create_shader("romanis.f.glsl", GL_FRAGMENT_SHADER)) == 0) return 0;
+
+  program = glCreateProgram();
+  glAttachShader(program, vs);
+  glAttachShader(program, fs);
+  glLinkProgram(program);
+  glGetProgramiv(program, GL_LINK_STATUS, &link_ok);
+
+  const char* attribute_name;
+  attribute_name = "coord2d";
+  attribute_coord2d = glGetAttribLocation(program, attribute_name);
+
+  attribute_name = "v_color";
+  attribute_v_color = glGetAttribLocation(program, attribute_name);
+
+  const char* uniform_name;
+  uniform_name = "fade";
+  uniform_fade = glGetUniformLocation(program, uniform_name);
+
+  return 1;
+}
+
+void onDisplay()
+{
+  glClearColor(0.0, 0.0, 0.0, 0.0);
+  glClear(GL_COLOR_BUFFER_BIT);
+
+  glShadeModel (GL_SMOOTH);
+  glUseProgram(program);
+  updateFrame();
+
+  glEnableVertexAttribArray(attribute_coord2d);
+  glEnableVertexAttribArray(attribute_v_color);
+
+  glBindBuffer(GL_ARRAY_BUFFER, vbo_romanis);
+  glVertexAttribPointer(
+    attribute_coord2d,   // attribute
+    2,                   // number of elements per vertex, here (x,y)
+    GL_FLOAT,            // the type of each element
+    GL_FALSE,            // take our values as-is
+    sizeof(struct attributes),  // next coord2d appears every 5 floats
+    0                    // offset of first element
+  );
+  glVertexAttribPointer(
+    attribute_v_color,      // attribute
+    3,                      // number of elements per vertex, here (r,g,b)
+    GL_FLOAT,               // the type of each element
+    GL_FALSE,               // take our values as-is
+    sizeof(struct attributes),  // stride
+    (GLvoid*) offsetof(struct attributes, v_color)  // offset
+  );
+
+  /* Push each element in buffer_vertices to the vertex shader */
+  glDrawArrays(GL_QUADS, 0, 4*NUM_SQRS);
+
+  glDisableVertexAttribArray(attribute_coord2d);
+  glDisableVertexAttribArray(attribute_v_color);
+  glutSwapBuffers();
+
+  if (frameCount<framesToDraw)
+  frameCount++;
+  fpsDisplay();
+
+  if(frameCount == framesToDraw) {
+
+  }
+
+}
+
+void free_resources()
+{
+  glDeleteProgram(program);
+  glDeleteBuffers(1, &vbo_romanis);
+}
+
+void drawFrame(){
+
+  frameCount = 0;
+
+  char dummyParam[] = " ";
+  char *dummyargv[] = { dummyParam, NULL };
+  int dummyargc = 1;
+  glutInit( &dummyargc, dummyargv );
+
+  glutInitDisplayMode(GLUT_RGBA|GLUT_ALPHA|GLUT_DOUBLE|GLUT_DEPTH);
+  glutInitWindowSize(WIN_HEIGHT, WIN_WIDTH);
+  glutCreateWindow("ROMANIS VISUALISATION");
+
+  GLenum glew_status = glewInit();
+
+  if (init_resources()) {
+    glutDisplayFunc(onDisplay);
+    glutTimerFunc(refreshDelay, timerEvent, 0);
+    glutMainLoop();
+    atexit(free_resources);
+  }
+}
+
+
+/* ###################################################################################
+					Test Main function
+   ################################################################################### */
+
+int main() {
+
+
+    long lSize;
+    int totalFrames = 1000;
+    //lSize = totalFrames*15*2*23*24*12;
+
+    printf("Starting ...\n");
+    FILE *fbfo;
+    fbfo  = fopen("/home/lonewolf/Dropbox/Bilinear interpolate/bfo","rb");
+    fseek (fbfo,0,SEEK_END);
+    lSize = (ftell(fbfo)/4) - 4;
+    bfoData = (float *)malloc((lSize)*sizeof(float));
+    rewind(fbfo);
+    fseek (fbfo , 4*sizeof(int) , SEEK_SET);
+    fread(bfoData,sizeof(float),lSize,fbfo);
+    fclose(fbfo);
+
+    initVars(lSize);
+    drawFrame();
+
+    return 0;
+    }

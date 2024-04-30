@@ -1,0 +1,12 @@
+#!/bin/bash
+ATT stopacq
+sshpass -proot ssh root@192.168.0.10 'killall  acquire_app'
+sshpass -proot ssh root@192.168.0.11 'killall  acquire_app'
+sshpass -proot ssh root@192.168.0.12 'killall  acquire_app'
+sshpass -proot ssh root@192.168.0.13 'killall  acquire_app'
+
+sshpass -proot ssh root@192.168.10.10 'killall  acquire_app'
+sshpass -proot ssh root@192.168.10.11 'killall  acquire_app'
+sshpass -proot ssh root@192.168.10.12 'killall  acquire_app'
+sshpass -proot ssh root@192.168.10.13 'killall  acquire_app'
+

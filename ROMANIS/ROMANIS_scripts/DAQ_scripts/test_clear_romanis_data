@@ -1,0 +1,6 @@
+#!/bin/bash
+DATA_FOLDER="/root/ROMANIS/DATA"
+
+rm -r -f $DATA_FOLDER/int/DAQ_?
+rm -r -f $DATA_FOLDER/ext/DAQ_?
+echo "Romanis Testing Data Files DELETED"

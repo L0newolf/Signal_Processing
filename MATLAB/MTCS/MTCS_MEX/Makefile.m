@@ -1,0 +1,1 @@
+mex -v CFLAGS="-I ./inc -Wall -Os -ffast-math -funroll-loops -march=native" src/mtcs.c src/calcDiff.c src/calcIntersect.c src/findMax.c;

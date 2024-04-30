@@ -1,0 +1,71 @@
+Station 3 : 
+
+Range:1921.6 
+
+BFSK WHOI 160 sbs
+
+scheme:6 bits:128 errors:54 ber:0.42188
+scheme:6 bits:128 errors:0 ber:0
+scheme:6 bits:128 errors:0 ber:0
+scheme:6 bits:128 errors:0 ber:0
+
+
+BFSK recon test in WHOI mode with 80 sbs
+
+ber:0
+
+BFSK recon test in ARL mode
+
+default settings :
+scheme:8 bits:1120 errors:0 ber:0 
+scheme:8 bits:1120 errors:1 ber:0.00089
+scheme:8 bits:1120 errors:9 ber:0.00804
+
+JANUS recon test
+
+scheme:9 bits:64 errors:0 ber:0
+
+MFSK tests 
+
+scheme:10 bits:1920 errors:36 ber:0.01875
+scheme:10 bits:1120 errors:7 ber:0.00625
+scheme:10 bits:1120 errors:6 ber:0.00536
+scheme:10 bits:640 errors:3 ber:0.00469
+scheme:10 bits:640 errors:1 ber:0.00156
+scheme:10 bits:640 errors:0 ber:0
+scheme:10 bits:1120 errors:43 ber:0.03839
+scheme:10 bits:1120 errors:66 ber:0.05893 
+scheme:10 bits:1120 errors:93 ber:0.08304
+scheme:10 bits:1120 errors:185 ber:0.16518
+scheme:10 bits:2640 errors:194 ber:0.07348
+scheme:10 bits:2640 errors:246 ber:0.09318
+scheme:10 bits:3200 errors:109 ber:0.03406
+scheme:10 bits:3200 errors:201 ber:0.06281
+scheme:10 bits:3200 errors:1 ber:0.00031
+
+Station 2 :  
+
+Range:754.2
+
+JANUS recon test
+
+scheme:9 bits:64 errors:0 ber:0
+scheme:9 bits:64 errors:16 ber:0.25
+scheme:9 bits:64 errors:36 ber:0.5625
+
+MFSK tests 
+
+scheme:10 bits:640 errors:35 ber:0.05469
+scheme:10 bits:640 errors:22 ber:0.03438
+cheme:10 bits:640 errors:307 ber:0.47969
+scheme:10 bits:1120 errors:36 ber:0.03214
+scheme:10 bits:1120 errors:182 ber:0.1625
+
+New Location : 
+
+Range:2300
+
+scheme:10 bits:3200 errors:339 ber:0.10594 
+scheme:10 bits:3200 errors:408 ber:0.1275
+scheme:10 bits:3200 errors:800 ber:0.25
+scheme:10 bits:640 errors:296 ber:0.4625

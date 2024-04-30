@@ -1,0 +1,31 @@
+ 
+Range:1921.6 
+
+Round 1 :
+
+scheme:10 bits:640 errors:2 ber:0.00313 seq:1]
+scheme:10 bits:640 errors:0 ber:0 seq:2]
+scheme:10 bits:640 errors:3 ber:0.00469 seq:3]
+scheme:10 bits:640 errors:1 ber:0.00156 seq:4]
+scheme:10 bits:640 errors:4 ber:0.00625 seq:5]
+scheme:10 bits:640 errors:2 ber:0.00313 seq:6]
+scheme:10 bits:640 errors:2 ber:0.00313 seq:7]
+scheme:10 bits:640 errors:1 ber:0.00156 seq:8]
+scheme:10 bits:640 errors:0 ber:0 seq:9]
+scheme:10 bits:640 errors:0 ber:0 seq:10]
+scheme:10 bits:640 errors:9 ber:0.01406 seq:11]
+scheme:10 bits:640 errors:7 ber:0.01094 seq:12]
+scheme:10 bits:640 errors:6 ber:0.00938 seq:13]
+scheme:10 bits:640 errors:7 ber:0.01094 seq:14]
+scheme:10 bits:640 errors:13 ber:0.02031 seq:15]
+scheme:10 bits:640 errors:17 ber:0.02656 seq:16]
+scheme:10 bits:640 errors:3 ber:0.00469 seq:17]
+scheme:10 bits:640 errors:9 ber:0.01406 seq:18]
+scheme:10 bits:640 errors:11 ber:0.01719 seq:19]
+scheme:10 bits:640 errors:5 ber:0.00781 seq:20]
+scheme:10 bits:640 errors:2 ber:0.00313 seq:21]
+scheme:10 bits:640 errors:4 ber:0.00625 seq:22]
+scheme:10 bits:640 errors:0 ber:0 seq:23]
+scheme:10 bits:640 errors:3 ber:0.00469 seq:24]
+scheme:10 bits:640 errors:2 ber:0.00313 seq:25]
+scheme:10 bits:640 errors:1 ber:0.00156 seq:26]

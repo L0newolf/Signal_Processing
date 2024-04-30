@@ -1,0 +1,18 @@
+#!/bin/bash
+
+ROMANIS_HOME = /home/arl/ROMANIS
+DAQ_FOLDER= $ROMANIS_HOME/DAQ_scripts
+SYSCON_FOLDER = $ROMANIS_HOME/SYSCON/SYSCON_dryend
+
+$SYSCON_FOLDER/ATT stopacq
+sleep 0.75s
+DATA_FOLDER=/home/arl/ROMANIS/ext
+TIMESTAMP=$DATA_FOLDER/$(date +%b_%d_%Y)/$(date +%b_%d_%Y-%H_%M_%S)
+mkdir -p $TIMESTAMP
+mv $DATA_FOLDER/DAQ* $TIMESTAMP/
+mv $ROMANIS_HOME/*.log $TIMESTAMP/
+
+
+
+
+ 

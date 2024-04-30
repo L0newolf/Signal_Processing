@@ -1,0 +1,23 @@
+NVCC=nvcc
+INC=/home/arl/NVIDIA_CUDA-5.5_Samples/NVIDIA_CUDA-5.5_Samples/common/inc/
+NVOPT=-m64 -O3 -gencode arch=compute_20,code=sm_20 -Xptxas -v --maxrregcount 63 -Xcompiler -mcmodel=large -I $(INC)
+NVOPTEXTRA = -gencode arch=compute_20,code=sm_20 -Xptxas -v --maxrregcount 63 -Xcompiler -mcmodel=large
+RT = server_app_ext.cu
+TEST = BFtest.cu
+
+DOPT=-g -lglut -lGLEW -lGL -lm -lpthread
+DISP= -L/usr/lib/nvidia-331-updates
+
+
+.PHONY: clean
+
+all:
+	$(NVCC) $(DISP) $(RT) $(NVOPT) $(DOPT) -o romanisRT
+test:
+	nvcc $(TEST) -m64 -arch=sm_20 -O2 -I $(INC) -o bftest	
+
+clean:
+	rm -f romanisRT
+	rm -f bftest
+
+

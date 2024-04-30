@@ -1,0 +1,66 @@
+<?xml version="1.0" encoding="iso-8859-1"?>
+
+<Workspace>
+  <ConfigDictionary>
+    
+  <CurrentConfigs><Project>project/Flash</Project></CurrentConfigs></ConfigDictionary>
+  <Desktop>
+    <Static>
+      <Build>
+        
+        
+        
+        
+      <ColumnWidth0>20</ColumnWidth0><ColumnWidth1>529</ColumnWidth1><ColumnWidth2>266</ColumnWidth2><ColumnWidth3>48</ColumnWidth3></Build>
+      <Workspace>
+        <ColumnWidths>
+          
+          
+          
+          
+        <Column0>166</Column0><Column1>3</Column1><Column2>27</Column2><Column3>1242260</Column3></ColumnWidths>
+      </Workspace>
+    <TerminalIO/><CodeCoveragePlugin/><Watch><PreferedWindows><Position>4</Position><ScreenPosX>825</ScreenPosX><ScreenPosY>119</ScreenPosY><Windows/></PreferedWindows></Watch><Debug-Log/></Static>
+    <Windows>
+      
+      
+    <Wnd0>
+        <Tabs>
+          <Tab>
+            <Identity>TabID-28375-31963</Identity>
+            <TabName>Workspace</TabName>
+            <Factory>Workspace</Factory>
+            <Session>
+              
+            <NodeDict><ExpandedNode>project</ExpandedNode></NodeDict></Session>
+          </Tab>
+        </Tabs>
+        
+      <SelectedTab>0</SelectedTab></Wnd0><Wnd1>
+        <Tabs>
+          <Tab>
+            <Identity>TabID-6355-31966</Identity>
+            <TabName>Build</TabName>
+            <Factory>Build</Factory>
+            <Session/>
+          </Tab>
+        <Tab><Identity>TabID-16393-3634</Identity><TabName>Debug Log</TabName><Factory>Debug-Log</Factory><Session/></Tab></Tabs>
+        
+      <SelectedTab>0</SelectedTab></Wnd1></Windows>
+    <Editor>
+      
+      
+      
+      
+    <Pane><Tab><Factory>TextEditor</Factory><Filename>C:\STARFISH\SSP-DMA\project\main.c</Filename><XPos>0</XPos><YPos>340</YPos><SelStart>11637</SelStart><SelEnd>11637</SelEnd></Tab><ActiveTab>0</ActiveTab><Tab><Factory>TextEditor</Factory><Filename>C:\STARFISH\SSP-DMA\library\src\91x_vic.c</Filename><XPos>0</XPos><YPos>753</YPos><SelStart>35379</SelStart><SelEnd>35379</SelEnd></Tab><Tab><Factory>TextEditor</Factory><Filename>C:\STARFISH\SSP-DMA\project\91x_it.c</Filename><XPos>0</XPos><YPos>204</YPos><SelStart>8188</SelStart><SelEnd>8188</SelEnd></Tab><Tab><Factory>TextEditor</Factory><Filename>C:\STARFISH\SSP-DMA\library\src\91x_dma.c</Filename><XPos>0</XPos><YPos>903</YPos><SelStart>31090</SelStart><SelEnd>31090</SelEnd></Tab><Tab><Factory>TextEditor</Factory><Filename>C:\STARFISH\SSP-DMA\library\inc\91x_map.h</Filename><XPos>0</XPos><YPos>741</YPos><SelStart>33075</SelStart><SelEnd>33096</SelEnd></Tab><Tab><Factory>TextEditor</Factory><Filename>C:\STARFISH\SSP-DMA\project\EWARM\91x_vect.s</Filename><XPos>0</XPos><YPos>196</YPos><SelStart>8963</SelStart><SelEnd>8963</SelEnd></Tab></Pane><ActivePane>0</ActivePane><Sizes><Pane><X>1000000</X><Y>1000000</Y></Pane></Sizes><SplitMode>1</SplitMode></Editor>
+    <Positions>
+      
+      
+      
+      
+      
+    <Top><Row0><Sizes><Toolbar-00b01b68><key>iaridepm.enu1</key></Toolbar-00b01b68></Sizes></Row0><Row1><Sizes/></Row1></Top><Left><Row0><Sizes><Wnd0><Rect><Top>-2</Top><Left>-2</Left><Bottom>398</Bottom><Right>216</Right><x>-2</x><y>-2</y><xscreen>200</xscreen><yscreen>200</yscreen><sizeHorzCX>195313</sizeHorzCX><sizeHorzCY>277008</sizeHorzCY><sizeVertCX>212891</sizeVertCX><sizeVertCY>554017</sizeVertCY></Rect></Wnd0></Sizes></Row0></Left><Right><Row0><Sizes/></Row0></Right><Bottom><Row0><Sizes><Wnd1><Rect><Top>-2</Top><Left>-2</Left><Bottom>280</Bottom><Right>1026</Right><x>-2</x><y>-2</y><xscreen>1028</xscreen><yscreen>282</yscreen><sizeHorzCX>1003906</sizeHorzCX><sizeHorzCY>390582</sizeHorzCY><sizeVertCX>195313</sizeVertCX><sizeVertCY>277008</sizeVertCY></Rect></Wnd1></Sizes></Row0></Bottom><Float><Sizes/></Float></Positions>
+  </Desktop>
+</Workspace>
+
+

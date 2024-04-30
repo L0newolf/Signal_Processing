@@ -1,0 +1,77 @@
+#!/bin/bash
+
+ROMANIS_HOME = /home/arl/ROMANIS
+DAQ_FOLDER= $ROMANIS_HOME/DAQ_scripts
+SYSCON_FOLDER = $ROMANIS_HOME/SYSCON/SYSCON_dryend
+LOG = $ROMANIS_HOME/log_$(date +%b_%d_%Y-%H_%M_%S).log
+
+$SYSCON_FOLDER/ATT stopacq
+
+echo -e "Starting real-time application .... " >> $LOG
+$ROMANIS_HOME/bin/romanisRT 3600
+$DAQ_FOLDER/ATT_fnt_pow
+
+i="0"
+while [ $i -lt 1 ];
+do
+echo -e "Please specify PGC value:\t"
+read -e pgc
+if (( $pgc > 7 )); then 
+	echo -e "Invalid PGC value"
+	echo
+else
+   $SYSCON_FOLDER/ATT setpgc $pgc >> >> $LOG
+   #echo -e "Valid PGC value\n"
+	i="1"
+fi
+done	 
+
+#echo -e "Well Done!"
+
+
+#echo -e "Enter number of Sets:\t"
+#read sets
+#count=$sets
+echo -e "Enter Acquisition Period(secs):\t"
+read acq_time
+
+#while [ $count -gt 0 ];
+#do
+
+sshpass -proot ssh root@192.168.0.10 '/usr/src/linux/drivers/16*/acq*/acquire_app 0 3600' & >> $LOG
+sshpass -proot ssh root@192.168.0.11 '/usr/src/linux/drivers/16*/acq*/acquire_app 0 3600' & >> $LOG
+sshpass -proot ssh root@192.168.0.12 '/usr/src/linux/drivers/16*/acq*/acquire_app 0 3600' & >> $LOG
+sshpass -proot ssh root@192.168.0.13 '/usr/src/linux/drivers/16*/acq*/acquire_app 0 3600' & >> $LOG 
+
+sshpass -proot ssh root@192.168.10.10 '/usr/src/linux/drivers/16*/acq*/acquire_app 0 3600' &  >> $LOG
+sshpass -proot ssh root@192.168.10.11 '/usr/src/linux/drivers/16*/acq*/acquire_app 0 3600' &  >> $LOG
+sshpass -proot ssh root@192.168.10.12 '/usr/src/linux/drivers/16*/acq*/acquire_app 0 3600' &  >> $LOG
+sshpass -proot ssh root@192.168.10.13 '/usr/src/linux/drivers/16*/acq*/acquire_app 0 3600' &  >> $LOG
+#echo "Acquisition started"
+sleep 0.75s
+
+#if (( $count == $sets )); then 
+echo -e "Start Acquisition Clock? (y/n):\t"
+read reply
+if [ $reply == y ]; then
+   $SYSCON_FOLDER/ATT startacq >> >> $LOG
+  #echo "Clock Started"
+   sleep $acq_time
+else
+   echo -e "Stopping Acquisition Clock"
+   $SYSCON_FOLDER/ATT stopacq  >> $LOG
+   $DAQ_FOLDER/DAQ_KILL_ACQ_EXT  >> $LOG
+#echo "Clock Stopped"
+fi	   
+#else
+#   ATT startacq
+   #echo "Clock Started"
+#   sleep $acq_time	   
+#fi
+
+#let count--   
+$DAQ_FOLDER/DAQ_STOP_ACQ_EXT  >> $LOG
+$SYSCON_FOLDER/ATT fntoff  >> $LOG
+
+echo -e "Data Acquisition and procesing completed .... " >> $LOG
+#done

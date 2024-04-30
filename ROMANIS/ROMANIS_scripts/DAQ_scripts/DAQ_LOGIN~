@@ -1,0 +1,8 @@
+#!/bin/bash
+FOLDER="/home/arl/Dropbox/SVN/trunk/ROMANIS/DAQ_scripts"
+
+rm -f /home/arl/.ssh/known_hosts
+/usr/bin/python $FOLDER/daq_login.py
+#/usr/bin/ATT fntoff
+/home/arl/Dropbox/SVN/trunk/ROMANIS/SYSCON/SYSCON_dryend/ATT stopacq
+

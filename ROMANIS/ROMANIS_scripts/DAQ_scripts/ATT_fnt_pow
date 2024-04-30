@@ -1,0 +1,11 @@
+#!/bin/bash
+
+$ROMANIS_HOME = /home/arl/ROMANIS
+$ROMANIS_HOME/SYSCON/SYSCON_dryend/ATT fnt1on
+sleep 1s
+$ROMANIS_HOME/SYSCON/SYSCON_dryend/ATT fnt2on
+sleep 1s
+$ROMANIS_HOME/SYSCON/SYSCON_dryend/ATT fnt3on
+sleep 1s
+$ROMANIS_HOME/SYSCON/SYSCON_dryend/ATT fnt4on
+

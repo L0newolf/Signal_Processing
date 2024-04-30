@@ -1,0 +1,59 @@
+<?xml version="1.0" encoding="iso-8859-1"?>
+
+<Workspace>
+  <ConfigDictionary>
+    
+  <CurrentConfigs><Project>project/Flash</Project></CurrentConfigs></ConfigDictionary>
+  <Desktop>
+    <Static>
+      <Workspace>
+        <ColumnWidths>
+          
+          
+          
+          
+        <Column0>304</Column0><Column1>3</Column1><Column2>27</Column2><Column3>1242260</Column3></ColumnWidths>
+      </Workspace>
+      <Build>
+        
+        
+        
+        
+      <PreferedWindows><Position>3</Position><ScreenPosX>0</ScreenPosX><ScreenPosY>0</ScreenPosY><Windows><Window><Factory>Debug-Log</Factory></Window></Windows></PreferedWindows><ColumnWidth0>20</ColumnWidth0><ColumnWidth1>723</ColumnWidth1><ColumnWidth2>508</ColumnWidth2><ColumnWidth3>48</ColumnWidth3></Build>
+      <TerminalIO/>
+      <CodeCoveragePlugin/>
+      <Debug-Log><PreferedWindows><Position>3</Position><ScreenPosX>0</ScreenPosX><ScreenPosY>0</ScreenPosY><Windows><Window><Factory>Build</Factory></Window></Windows></PreferedWindows></Debug-Log>
+    </Static>
+    <Windows>
+      
+      
+    <Wnd1>
+        <Tabs>
+          <Tab>
+            <Identity>TabID-709-21531</Identity>
+            <TabName>Workspace</TabName>
+            <Factory>Workspace</Factory>
+            <Session>
+              
+            <NodeDict><ExpandedNode>project</ExpandedNode></NodeDict></Session>
+          </Tab>
+        </Tabs>
+        
+      <SelectedTab>0</SelectedTab></Wnd1><Wnd3><Tabs><Tab><Identity>TabID-31415-14959</Identity><TabName>Build</TabName><Factory>Build</Factory><Session/></Tab><Tab><Identity>TabID-5019-17205</Identity><TabName>Debug Log</TabName><Factory>Debug-Log</Factory><Session/></Tab></Tabs><SelectedTab>0</SelectedTab></Wnd3></Windows>
+    <Editor>
+      
+      
+      
+      
+    <Pane><Tab><Factory>TextEditor</Factory><Filename>C:\work\STARFISH\SSP_DMA_ADC\project\main.c</Filename><XPos>0</XPos><YPos>95</YPos><SelStart>4002</SelStart><SelEnd>4002</SelEnd></Tab><ActiveTab>0</ActiveTab><Tab><Factory>TextEditor</Factory><Filename>C:\work\STARFISH\SSP_DMA_ADC\project\91x_it.c</Filename><XPos>0</XPos><YPos>0</YPos><SelStart>1561</SelStart><SelEnd>1561</SelEnd></Tab><Tab><Factory>TextEditor</Factory><Filename>C:\work\STARFISH\SSP_DMA_ADC\library\src\91x_tim.c</Filename><XPos>0</XPos><YPos>502</YPos><SelStart>18569</SelStart><SelEnd>18569</SelEnd></Tab><Tab><Factory>TextEditor</Factory><Filename>C:\work\STARFISH\SSP_DMA_ADC\library\inc\91x_tim.h</Filename><XPos>0</XPos><YPos>46</YPos><SelStart>2735</SelStart><SelEnd>2735</SelEnd></Tab><Tab><Factory>TextEditor</Factory><Filename>C:\work\STARFISH\SSP_DMA_ADC\library\src\91x_gpio.c</Filename><XPos>0</XPos><YPos>210</YPos><SelStart>8369</SelStart><SelEnd>8369</SelEnd></Tab><Tab><Factory>TextEditor</Factory><Filename>C:\work\STARFISH\SSP_DMA_ADC\library\inc\91x_it.h</Filename><XPos>0</XPos><YPos>33</YPos><SelStart>0</SelStart><SelEnd>0</SelEnd></Tab><Tab><Factory>TextEditor</Factory><Filename>C:\work\STARFISH\SSP_DMA_ADC\project\EWARM\91x_init.s</Filename><XPos>0</XPos><YPos>68</YPos><SelStart>3758</SelStart><SelEnd>3758</SelEnd></Tab><Tab><Factory>TextEditor</Factory><Filename>C:\work\STARFISH\SSP_DMA_ADC\project\EWARM\91x_vect.s</Filename><XPos>0</XPos><YPos>205</YPos><SelStart>10906</SelStart><SelEnd>10915</SelEnd></Tab><Tab><Factory>TextEditor</Factory><Filename>C:\work\STARFISH\SSP_DMA_ADC\ENETLib\library\src\91x_enet.c</Filename><XPos>0</XPos><YPos>355</YPos><SelStart>12792</SelStart><SelEnd>12792</SelEnd></Tab></Pane><ActivePane>0</ActivePane><Sizes><Pane><X>1000000</X><Y>1000000</Y></Pane></Sizes><SplitMode>1</SplitMode></Editor>
+    <Positions>
+      
+      
+      
+      
+      
+    <Top><Row0><Sizes><Toolbar-00b11df8><key>iaridepm.enu1</key></Toolbar-00b11df8></Sizes></Row0></Top><Left><Row0><Sizes><Wnd1><Rect><Top>-2</Top><Left>-2</Left><Bottom>600</Bottom><Right>354</Right><x>-2</x><y>-2</y><xscreen>140</xscreen><yscreen>138</yscreen><sizeHorzCX>90850</sizeHorzCX><sizeHorzCY>152318</sizeHorzCY><sizeVertCX>231019</sizeVertCX><sizeVertCY>664459</sizeVertCY></Rect></Wnd1></Sizes></Row0></Left><Right><Row0><Sizes/></Row0></Right><Bottom><Row0><Sizes><Wnd3><Rect><Top>-2</Top><Left>-2</Left><Bottom>260</Bottom><Right>1543</Right><x>-2</x><y>-2</y><xscreen>1545</xscreen><yscreen>262</yscreen><sizeHorzCX>1002596</sizeHorzCX><sizeHorzCY>289183</sizeHorzCY><sizeVertCX>90850</sizeVertCX><sizeVertCY>152318</sizeVertCY></Rect></Wnd3></Sizes></Row0></Bottom><Float><Sizes/></Float></Positions>
+  </Desktop>
+</Workspace>
+
+

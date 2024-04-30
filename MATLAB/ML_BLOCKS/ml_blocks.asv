@@ -1,0 +1,20 @@
+
+
+clear all;
+run('params');
+
+numLoops = 50;
+
+stateList = zeros(numLoops,stateRows,stateCols);
+
+targetState = setDefaultState();
+drawFigure(1,targetState);
+
+for i=1:50
+genRandomState();
+startingState = curState;
+addStateToList();
+drawFigure(2,curState);
+pause(1);
+sortToTargetState(targetState);
+end

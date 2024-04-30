@@ -1,0 +1,68 @@
+#!/bin/bash
+
+ROMANIS_HOME = /home/arl/ROMANIS
+DAQ_FOLDER= $ROMANIS_HOME/DAQ_scripts
+SYSCON_FOLDER = $ROMANIS_HOME/SYSCON/SYSCON_dryend
+
+$SYSCON_FOLDER/ATT stopacq
+
+#SERVICE='server_app_ext'
+SERVICE='romanisRT'
+
+if ps ax | grep -v grep | grep $SERVICE > /dev/null
+then
+    echo "$SERVICE service running, everything is fine"
+else
+    echo "$SERVICE is NOT running"
+    echo "PLEASE ensure that Acquisition Server is running!!" 
+    exit
+fi
+
+echo -e "STARFISH detection trial - Acqn Num:\t"
+read -e log_entry
+echo -e "Log Entry: STARFISH detection trial - Signal $log_entry" >> /root/ROMANIS/DATA/ext/log
+
+i="0"
+#while [ $i -lt 1 ];
+#do
+#echo -e "Please specify PGC value:\t"
+#read -e reply
+#if (("$reply" > 7 ));  then
+#	echo -e "Invalid PGC value"
+#	echo
+#else
+$SYSCON_FOLDER/ATT setpgc 4 >> $ROMANIS_HOME/log_ext.log
+#	i="1"
+#fi
+#done	 
+
+#echo -e "Well Done!"
+
+echo -e "Enter Acquisition Period(secs):\t"
+read acq_time
+
+sleep 35.0s
+
+sshpass -proot ssh root192.168.0.10 '/usr/src/linux/drivers/16*/acq*/acquire_app 0 3600' &
+sshpass -proot ssh root192.168.0.11 '/usr/src/linux/drivers/16*/acq*/acquire_app 0 3600' &
+sshpass -proot ssh root192.168.0.12 '/usr/src/linux/drivers/16*/acq*/acquire_app 0 3600' &
+sshpass -proot ssh root192.168.0.13 '/usr/src/linux/drivers/16*/acq*/acquire_app 0 3600' &
+
+sshpass -proot ssh root192.168.10.10 '/usr/src/linux/drivers/16*/acq*/acquire_app 0 3600' &
+sshpass -proot ssh root192.168.10.11 '/usr/src/linux/drivers/16*/acq*/acquire_app 0 3600' &
+sshpass -proot ssh root192.168.10.12 '/usr/src/linux/drivers/16*/acq*/acquire_app 0 3600' &
+sshpass -proot ssh root192.168.10.13 '/usr/src/linux/drivers/16*/acq*/acquire_app 0 3600' &
+
+sleep 2.5s
+
+#echo -e "Start Acquisition Clock? (y/n):\t"
+#read reply
+#if [ $reply == y ]; then
+	$SYSCON_FOLDER/ATT startacq
+	sleep $acq_time
+#else
+#	echo -e "Stopping Acquisition Clock"
+#	ATT stopacq
+#fi
+
+$DAQ_FOLDER/DAQ_STOP_ACQ_EXT

@@ -1,0 +1,11 @@
+#!/bin/bash
+sshpass -proot ssh root@192.168.0.10 'poweroff'
+sshpass -proot ssh root@192.168.0.11 'poweroff'
+sshpass -proot ssh root@192.168.0.12 'poweroff'
+sshpass -proot ssh root@192.168.0.13 'poweroff'
+
+sshpass -proot ssh root@192.168.10.10 'poweroff'
+sshpass -proot ssh root@192.168.10.11 'poweroff'
+sshpass -proot ssh root@192.168.10.12 'poweroff'
+sshpass -proot ssh root@192.168.10.13 'poweroff'
+

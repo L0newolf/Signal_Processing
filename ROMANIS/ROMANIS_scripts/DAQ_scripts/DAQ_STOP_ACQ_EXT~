@@ -1,0 +1,13 @@
+#!/bin/bash
+
+/home/arl/Dropbox/SVN/trunk/ROMANIS/SYSCON/SYSCON_dryend/ATT stopacq
+sleep 0.75s
+DATA_FOLDER=/home/arl/ROMANIS_RECORD/ext
+TIMESTAMP=$DATA_FOLDER/$(date +%b_%d_%Y)/$(date +%b_%d_%Y-%H_%M_%S)
+mkdir -p $TIMESTAMP
+#mv $DATA_FOLDER/DAQ* $TIMESTAMP/
+
+
+
+
+ 

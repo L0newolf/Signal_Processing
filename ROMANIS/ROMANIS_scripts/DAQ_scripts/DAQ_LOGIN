@@ -1,0 +1,7 @@
+#!/bin/bash
+$ROMANIS_HOME = /home/arl/ROMANIS
+
+rm -f /home/arl/.ssh/known_hosts
+/usr/bin/python $ROMANIS_HOME/DAQ_scripts/daq_login.py
+$ROMANIS_HOME/SYSCON/SYSCON_dryend/ATT stopacq
+

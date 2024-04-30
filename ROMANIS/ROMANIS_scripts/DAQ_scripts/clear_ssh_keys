@@ -1,0 +1,6 @@
+#!/bin/bash
+
+rm /root/.ssh/known_hosts
+#/usr/bin/ssh $1 
+
+

@@ -1,0 +1,11 @@
+#!/bin/bash
+sshpass -proot ssh root@192.168.0.10 '/usr/src/linux/dri*/16*/acq*/acquire_app_int 0 3500' &
+sshpass -proot ssh root@192.168.0.11 '/usr/src/linux/dri*/16*/acq*/acquire_app_int 0 3500' &
+sshpass -proot ssh root@192.168.0.12 '/usr/src/linux/dri*/16*/acq*/acquire_app_int 0 3500' &
+sshpass -proot ssh root@192.168.0.13 '/usr/src/linux/dri*/16*/acq*/acquire_app_int 0 3500' &
+
+sshpass -proot ssh root@192.168.10.10 '/usr/src/linux/dri*/16*/acq*/acquire_app_int 0 3500' &
+sshpass -proot ssh root@192.168.10.11 '/usr/src/linux/dri*/16*/acq*/acquire_app_int 0 3500' &
+sshpass -proot ssh root@192.168.10.12 '/usr/src/linux/dri*/16*/acq*/acquire_app_int 0 3500' &
+sshpass -proot ssh root@192.168.10.13 '/usr/src/linux/dri*/16*/acq*/acquire_app_int 0 3500' &
+

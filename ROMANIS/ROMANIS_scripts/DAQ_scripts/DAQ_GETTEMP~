@@ -1,0 +1,26 @@
+#!/bin/bash
+i=1
+echo -e "DAQ_$i"
+ssh root@192.168.0.10 'acpi -t | grep "Thermal 1:"'
+let i++
+echo -e "DAQ_$i"
+ssh root@192.168.0.11 'acpi -t | grep "Thermal 1:"'
+let i++
+echo -e "DAQ_$i"
+ssh root@192.168.0.12 'acpi -t | grep "Thermal 1:"'
+let i++
+echo -e "DAQ_$i"
+ssh root@192.168.0.13 'acpi -t | grep "Thermal 1:"'
+let i++
+echo -e "DAQ_$i"
+ssh root@192.168.10.10 'acpi -t | grep "Thermal 1:"'
+let i++
+echo -e "DAQ_$i"
+ssh root@192.168.10.11 'acpi -t | grep "Thermal 1:"'
+let i++
+echo -e "DAQ_$i"
+ssh root@192.168.10.12 'acpi -t | grep "Thermal 1:"'
+let i++
+echo -e "DAQ_$i"
+ssh root@192.168.10.13 'acpi -t | grep "Thermal 1:"'
+
